@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "map-my-bike-no",
+    "name": "com.betanyeli.mapmybikeno",
     "slug": "map-my-bike-no",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,20 +15,32 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
+    "assetBundlePatterns": ["**/*"],
+
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAoQsTiphE-kNYSyI7Z6tkPgG-V9yy3PXc"
+        }
+      },
+      "package": "com.betanyeli.mapmybikeno"
+    },
+    "ios": {
+      "bundleIdentifier": "com.betanyeli.mapmybikeno",
+      "buildNumber": "1.0.0",
+      "supportsTablet": true
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "9c22383d-690a-42eb-b5cd-c62e7a7312a8"
+      }
     }
   }
 }

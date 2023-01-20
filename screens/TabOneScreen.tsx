@@ -1,15 +1,25 @@
 import { StyleSheet } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
 
-import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from '../components/Themed';
+import { View } from '../components/Themed';
+import useFetch from '../hooks/useFetch';
 import { RootTabScreenProps } from '../types';
 
 export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
+  const { DEFAULT_COORDINATE, centers } = useFetch()
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabOneScreen.tsx" />
+      <MapView style={styles.map}
+        initialRegion={DEFAULT_COORDINATE}>
+        {centers.map(({ latitude, longitude }) => {
+          return <Marker
+            key={`Custom Key ${latitude} ${Math.random()}`}
+            coordinate={{ latitude, longitude }}
+            image={{ uri: "https://i.ibb.co/DRxz9KC/pin-png-39463.png" }}
+          />
+        })}
+      </MapView>
     </View>
   );
 }
@@ -17,16 +27,9 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+  map: {
+    width: '100%',
+    height: '100%',
   },
 });

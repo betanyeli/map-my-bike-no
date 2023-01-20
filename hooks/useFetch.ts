@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { LatLng } from "react-native-maps";
 
 export const stationsEndpoint: string =
   "https://oslobysykkel.no/api/v1/stations";
@@ -23,8 +24,8 @@ export interface Stations {
   title: string;
   subtitle: string;
   number_of_locks: number;
-  center: Center;
-  bounds: Center[];
+  center: LatLng;
+  bounds: LatLng[];
 }
 
 export interface Data {
@@ -47,7 +48,7 @@ export interface AvailableStation {
 
 const useFetch = () => {
   const [stations, setStations] = useState<Stations[]>();
-  const [centers, setCenters] = useState<MapMarker[]>();
+  const [centers, setCenters] = useState([]);
   const [availableStations, setAvailablesStations] =
     useState<AvailableStations[]>();
   const [loading, setLoading] = useState(false);
@@ -72,8 +73,8 @@ const useFetch = () => {
         .map((item: any) => ({
           latitude: item.latitude,
           longitude: item.longitude,
-          //   icon: "🚴‍♀️",
-          //   size: [32, 32],
+          latitudeDelta: 0.04,
+          longitudeDelta: 0.05,
         }));
       setCenters(centerParsed);
     } catch (error: any) {

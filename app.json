@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "com.betanyeli.mapmybikeno",
+    "name": "Map My Bike",
     "slug": "map-my-bike-no",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#00B4C5"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -20,11 +20,11 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#00B4C5"
       },
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyAoQsTiphE-kNYSyI7Z6tkPgG-V9yy3PXc"
+          "apiKey": "MY_API_KEY_UWU"
         }
       },
       "package": "com.betanyeli.mapmybikeno"

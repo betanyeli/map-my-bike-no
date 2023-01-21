@@ -15,9 +15,10 @@ import useColorScheme from '../hooks/useColorScheme';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import HomeScreen from '../screens/HomeScreen/HomeScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
+import ChartScreen from '../screens/ChartScreen/ChartScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
+
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -70,12 +71,12 @@ function BottomTabNavigator() {
           tabBarIcon: ({ color }) => <TabBarIcon name="bicycle" color={color} />,
           headerRight: () => (
             <Pressable
-              onPress={() => navigation.navigate('Modal')}
+              onPress={() => { }}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
               })}>
               <FontAwesome
-                name="map"
+                name="refresh"
                 size={25}
                 color={Colors[colorScheme].text}
                 style={{ marginRight: 15 }}
@@ -85,8 +86,16 @@ function BottomTabNavigator() {
         })}
       />
       <BottomTab.Screen
+        name="ListStation"
+        component={ChartScreen}
+        options={{
+          title: 'List Station',
+          tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
         name="TabTwo"
-        component={TabTwoScreen}
+        component={ChartScreen}
         options={{
           title: 'Charts',
           tabBarIcon: ({ color }) => <TabBarIcon name="bar-chart" color={color} />,

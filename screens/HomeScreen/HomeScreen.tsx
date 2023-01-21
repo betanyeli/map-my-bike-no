@@ -1,4 +1,3 @@
-import { StyleSheet } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { View } from '../../components/Themed';
 import useFetch from '../../hooks/useFetch';

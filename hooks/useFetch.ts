@@ -2,10 +2,7 @@ import { useState, useEffect } from "react";
 import axios, { AxiosResponse } from "axios";
 import { AvailableStations, Stations } from "../constants/Types";
 
-export const stationsEndpoint: string =
-  "https://oslobysykkel.no/api/v1/stations";
-export const availableStationsEndpoint: string =
-  " https://gbfs.urbansharing.com/oslobysykkel.no/station_status.json";
+export const BASE_URL = "https://oslobysykkel.no/api/v1/";
 
 const useFetch = () => {
   const [stations, setStations] = useState<Stations[]>();
@@ -13,6 +10,7 @@ const useFetch = () => {
   const [availableStations, setAvailablesStations] =
     useState<AvailableStations[]>();
   const [loading, setLoading] = useState(false);
+  const [loadingStatus, setLoadingStatus] = useState(false);
   const [error, setError] = useState<boolean>(false);
   const [errorAvailableStations, setErrorAvailableStations] =
     useState<boolean>(false);
@@ -20,7 +18,7 @@ const useFetch = () => {
   const getStations = async () => {
     setLoading(true);
     try {
-      const response: AxiosResponse = await axios.get(stationsEndpoint, {
+      const response: AxiosResponse = await axios.get(`${BASE_URL}stations`, {
         headers: {
           "Client-Identifier": "betanyeli-map-my-bike",
           Accept: "application/json",
@@ -44,11 +42,11 @@ const useFetch = () => {
     setLoading(false);
   };
 
-  const getAvailableStations = async () => {
-    setLoading(true);
+  const getStationStatus = async () => {
+    setLoadingStatus(true);
     try {
       const response: AxiosResponse = await axios.get(
-        availableStationsEndpoint,
+        `${BASE_URL}station_status.json`,
         {
           headers: {
             "Client-Identifier": "betanyeli-map-my-bike",
@@ -62,7 +60,7 @@ const useFetch = () => {
     } catch (error: any) {
       setErrorAvailableStations(true);
     }
-    setLoading(false);
+    setLoadingStatus(false);
   };
 
   const DEFAULT_COORDINATE = {
@@ -71,9 +69,10 @@ const useFetch = () => {
     latitudeDelta: 0.04,
     longitudeDelta: 0.05,
   };
+
   useEffect(() => {
     getStations();
-    getAvailableStations();
+    getStationStatus();
   }, []);
 
   return {
@@ -84,6 +83,8 @@ const useFetch = () => {
     error,
     centers,
     DEFAULT_COORDINATE,
+    getStations,
+    loadingStatus,
   };
 };
 

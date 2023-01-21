@@ -1,64 +1,57 @@
-import { View, Text } from 'react-native'
-import React, { useEffect } from 'react'
+import { View, Text, FlatList, ActivityIndicator } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { styles } from './ChartScreen.styles'
-import { Dimensions } from "react-native";
-import { BarChart } from 'react-native-chart-kit'
-import useApi from '../../hooks/useApi';
+import useStationAvailability from '../../hooks/useStationAvailability';
+import { Station } from '../../interfaces/StationStatus';
+import Loader from '../../components/loader/Loader';
+import ErrorScreen from '../ErrorScreen/ErrorScreen';
+import { MonoText } from '../../components/StyledText';
 
-import { Station, StationStatus } from '../../interfaces/StationStatus';
 
 
 const ChartScreen = () => {
 
-    const BASE_URL = "https://oslobysykkel.no/api/v1/";
+    const [data, loading, error] = useStationAvailability(`https://gbfs.urbansharing.com/oslobysykkel.no/station_status.json`, {
+        data: {
+            stations: [{
+            }]
+        }
+    });
+    const [stations, setStations] = useState<Station[]>([])
 
-    const [data, loading, error] = useApi<StationStatus>(`${BASE_URL}stations/availability`, {});
+    useEffect(() => {
+        if (data?.data?.stations) {
+            const uniqueStations: any = [...new Set(data?.data?.stations)]
+            setStations(uniqueStations)
+        }
+    }, [data])
+
+    type ItemProps = { title: string };
+
+    const Item = ({ title }: ItemProps) => (
+        <View style={{
+            backgroundColor: '#f9c2ff',
+            padding: 20,
+            marginVertical: 8,
+            marginHorizontal: 16,
+        }}>
+            <MonoText>{title}</MonoText>
+        </View>
+    );
 
 
-
-    const screenWidth = Dimensions.get("window").width;
-    const chartConfig = {
-        backgroundGradientFrom: "#1E2923",
-        backgroundGradientFromOpacity: 0,
-        backgroundGradientTo: "#08130D",
-        backgroundGradientToOpacity: 0.5,
-        color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-        strokeWidth: 3, // optional, default 3
-        barPercentage: 0.5,
-        useShadowColorFromDataset: false // optional
-    };
-    const _data = {
-        labels: ["January", "February", "March", "April", "May", "June", "January", "February", "March", "April", "May", "June", "January", "February", "March", "April", "May", "June"],
-        datasets: [
-            {
-                data: [20, 45, 28, 80, 99, 43]
-            },
-        ]
-    };
-
-    if (loading) {
-        return <View style={{ flex: 1, backgroundColor: 'pink' }}><Text>Loading...</Text></View>;
-    }
 
     if (error) {
-        return <Text>Error</Text>;
+        return <ErrorScreen />;
     }
-
     return (
-        <View>
-            {/* <BarChart
-                data={_data}
-                width={screenWidth}
-                height={250}
-                yAxisLabel="$"
-                chartConfig={chartConfig}
-                verticalLabelRotation={30}
-                yAxisSuffix=""
-
-            /> */}
-            {data?.data?.stations?.map((station: Station) => {
-                return <Text key={station?.station_id}>Aki ta</Text>
-            })}
+        <View style={styles.container}>
+            <Loader loading={loading} />
+            <FlatList
+                data={stations}
+                keyExtractor={item => item.station_id + item.last_reported}
+                renderItem={({ item }) => <Item title={item.station_id} />}
+            />
         </View>
     )
 }

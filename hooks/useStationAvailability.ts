@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Station } from "../interfaces/StationStatus";
 
 interface ApiResponse<T> {
   data: T;
@@ -13,10 +14,14 @@ interface Error {
   message: string;
 }
 
-const useApi = <T>(url: string, initialData: T): [T, boolean, any] => {
+const useStationAvailability = <T>(
+  url: string,
+  initialData: T
+): [T, boolean, any] => {
   const [data, setData] = useState<T>(initialData);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | undefined>();
+  const [stations, setStations] = useState<Station[]>([]);
   const config = {
     headers: {
       "Client-Identifier": "betanyeli-map-my-bike",
@@ -30,21 +35,20 @@ const useApi = <T>(url: string, initialData: T): [T, boolean, any] => {
       setLoading(true);
       try {
         const response: ApiResponse<T> = await axios.get(url, config);
-        setData(response.data || initialData);
-        console.log("llego aqui");
+        setData(response?.data || initialData);
+        setLoading(false);
       } catch (err: unknown) {
-        console.log("llego aca");
         if (err instanceof Error) {
           setError({ message: err.message });
         }
       } finally {
-        () => setLoading(false);
+        setLoading(false);
       }
     };
-    fetchData();
+    fetchData().then((response) => response);
   }, [url]);
 
   return [data, loading, error];
 };
 
-export default useApi;
+export default useStationAvailability;

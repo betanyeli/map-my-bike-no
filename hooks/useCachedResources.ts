@@ -15,7 +15,7 @@ export default function useCachedResources() {
         // Load fonts
         await Font.loadAsync({
           ...FontAwesome.font,
-          "barlow-regular": require("../assets/fonts/Barlow-Regular.ttf"),
+          Barlow: require("../assets/fonts/Barlow-Regular.ttf"),
         });
       } catch (e) {
         // We might want to provide this error information to an error reporting service

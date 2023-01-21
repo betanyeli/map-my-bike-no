@@ -1,3 +1,12 @@
+import { LatLng } from "react-native-maps";
+
+export interface ApiResponse<T> {
+  data: T;
+  status: number;
+  statusText: string;
+  headers: any;
+  config: any;
+}
 export interface Center {
   latitude: number;
   longitude: number;
@@ -8,8 +17,8 @@ export interface Stations {
   title: string;
   subtitle: string;
   number_of_locks: number;
-  center: Center;
-  bounds: Center[];
+  center: LatLng;
+  bounds: LatLng[];
 }
 
 export interface Data {

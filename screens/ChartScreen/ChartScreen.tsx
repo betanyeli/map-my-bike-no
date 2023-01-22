@@ -1,17 +1,17 @@
-import { View, Text, FlatList, ActivityIndicator } from 'react-native'
+import { View, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { styles } from './ChartScreen.styles'
-import useStationAvailability from '../../hooks/useStationAvailability';
 import { Station } from '../../interfaces/StationStatus';
 import Loader from '../../components/loader/Loader';
 import ErrorScreen from '../ErrorScreen/ErrorScreen';
 import { MonoText } from '../../components/StyledText';
-
-
+import useStationInfo from '../../hooks/useStationInfo';
 
 const ChartScreen = () => {
 
-    const [data, loading, error] = useStationAvailability(`https://gbfs.urbansharing.com/oslobysykkel.no/station_status.json`, {
+    const BASE_URL = `https://gbfs.urbansharing.com/oslobysykkel.no/station_status.json`;
+
+    const [data, loading, error] = useStationInfo(BASE_URL, {
         data: {
             stations: [{
             }]
@@ -38,7 +38,6 @@ const ChartScreen = () => {
             <MonoText>{title}</MonoText>
         </View>
     );
-
 
 
     if (error) {

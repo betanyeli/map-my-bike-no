@@ -5,7 +5,7 @@
  */
 import { FontAwesome } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme, DarkTheme, useNavigationState } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 import { ColorSchemeName, Pressable } from 'react-native';
@@ -18,6 +18,7 @@ import HomeScreen from '../screens/HomeScreen/HomeScreen';
 import ChartScreen from '../screens/ChartScreen/ChartScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
+import ErrorScreen from '../screens/ErrorScreen/ErrorScreen';
 
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
@@ -66,24 +67,13 @@ function BottomTabNavigator() {
       <BottomTab.Screen
         name="TabOne"
         component={HomeScreen}
-        options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
-          title: 'Bikes',
+        options={({ navigation, route }: RootTabScreenProps<'TabOne'>) => ({
+          title: 'MapMyBike v1',
+          tabBarLabel: 'Bikes',
+          tabBarBadge: route?.params?.stations || null,
           tabBarIcon: ({ color }) => <TabBarIcon name="bicycle" color={color} />,
-          headerRight: () => (
-            <Pressable
-              onPress={() => { }}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}>
-              <FontAwesome
-                name="refresh"
-                size={25}
-                color={Colors[colorScheme].text}
-                style={{ marginRight: 15 }}
-              />
-            </Pressable>
-          ),
         })}
+
       />
       <BottomTab.Screen
         name="ListStation"
@@ -95,7 +85,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="TabTwo"
-        component={ChartScreen}
+        component={ErrorScreen}
         options={{
           title: 'Charts',
           tabBarIcon: ({ color }) => <TabBarIcon name="bar-chart" color={color} />,

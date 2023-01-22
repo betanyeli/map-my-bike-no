@@ -1,60 +1,49 @@
 import { useState, useEffect } from "react";
-import axios, { AxiosResponse } from "axios";
-import { Stations } from "../constants/Types";
+import axios from "axios";
 
-export const BASE_URL = "https://oslobysykkel.no/api/v1/";
+interface ApiResponse<T> {
+  data: T;
+  status: number;
+  statusText: string;
+  headers: any;
+  config: any;
+}
 
-const useStationInfo = () => {
-  const [stations, setStations] = useState<Stations[]>();
-  const [centers, setCenters] = useState([]);
+interface Error {
+  message: string;
+}
+
+const useStationInfo = <T>(url: string, initialData: T): [T, boolean, any] => {
+  const [data, setData] = useState<T>(initialData);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<boolean>(false);
-
-  const DEFAULT_COORDINATE = {
-    latitude: 59.911316550780164,
-    longitude: 10.776308380880522,
-    latitudeDelta: 0.04,
-    longitudeDelta: 0.05,
+  const [error, setError] = useState<Error | undefined>();
+  const config = {
+    headers: {
+      "Client-Identifier": "betanyeli-map-my-bike",
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
   };
 
   useEffect(() => {
-    const getStations = async () => {
+    const fetchData = async () => {
       setLoading(true);
       try {
-        const response: AxiosResponse = await axios.get(`${BASE_URL}stations`, {
-          headers: {
-            "Client-Identifier": "betanyeli-map-my-bike",
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        });
-
-        setStations(response?.data?.stations);
-        const centerParsed = response?.data?.stations
-          .flatMap((station: any) => station.bounds)
-          .map((item: any) => ({
-            latitude: item.latitude,
-            longitude: item.longitude,
-            latitudeDelta: 0.04,
-            longitudeDelta: 0.05,
-          }));
-        setCenters(centerParsed);
+        const response: ApiResponse<T> = await axios.get(url, config);
+        setData(response?.data || initialData);
         setLoading(false);
-      } catch (error: any) {
-        setError(true);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError({ message: err.message });
+        }
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
-    getStations().then((response) => response);
-  }, []);
+    fetchData().then((response) => response);
+  }, [url]);
 
-  return {
-    stations,
-    loading,
-    error,
-    centers,
-    DEFAULT_COORDINATE,
-  };
+  return [data, loading, error];
 };
 
 export default useStationInfo;

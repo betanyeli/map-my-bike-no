@@ -51,7 +51,7 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'TabOne'>)
             <MapView style={styles.map}
                 initialRegion={DEFAULT_COORDINATE}
                 showsUserLocation>
-                {stations.length > 0 ? stations.map(({ lat, lon, capacity, name, }) => {
+                {/* {stations.length > 0 ? stations.map(({ lat, lon, capacity, name, }) => {
                     return <Marker
                         title={name || 'Not found'}
                         description={`Capacity: ${capacity || 0}`}
@@ -59,7 +59,7 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'TabOne'>)
                         coordinate={{ latitude: lat || defaultLt, longitude: lon || defaultLn }}
                         image={require('../../assets/images/bike-available.png')}
                     />
-                }) : null}
+                }) : null} */}
             </MapView>
         </View>
     );

@@ -23,7 +23,7 @@
       },
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyAoQsTiphE-kNYSyI7Z6tkPgG-V9yy3PXc"
+          "apiKey": "YourOwnGoogleApiKeyUwU"
         }
       },
       "package": "com.betanyeli.mapmybikeno"

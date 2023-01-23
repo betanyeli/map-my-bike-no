@@ -8,8 +8,6 @@ import { RootTabScreenProps } from '../../types';
 import ErrorScreen from '../ErrorScreen/ErrorScreen';
 import { styles } from './HomeScreen.styles';
 
-
-
 export default function HomeScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
     const { DEFAULT_COORDINATE, defaultLn, defaultLt } = useMergedStationData()
     const { stations, loading, error, } = useContext(StationsContext)
@@ -24,6 +22,7 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'TabOne'>)
             <MapView style={styles.map}
                 initialRegion={DEFAULT_COORDINATE}
                 showsUserLocation
+                loadingEnabled
             >
                 {stations.length > 0 ? stations.map(({ lat, lon, name, num_bikes_available }: any) => {
                     return <Marker

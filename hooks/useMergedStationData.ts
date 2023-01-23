@@ -6,7 +6,26 @@ const useMergedStationData = () => {
 
   const defaultData = {
     data: {
-      stations: [{}],
+      stations: [
+        {
+          address: "Økernveien 147",
+          capacity: 12,
+          is_installed: 1,
+          is_renting: 1,
+          is_returning: 1,
+          last_reported: 1674436452,
+          lat: 59.911316550780164,
+          lon: 10.776308380880522,
+          name: "Default while data is loading",
+          num_bikes_available: 1,
+          num_docks_available: 11,
+          rental_uris: {
+            android: "oslobysykkel://stations/2355",
+            ios: "oslobysykkel://stations/2355",
+          },
+          station_id: "2355",
+        },
+      ],
     },
   };
   const defaultLt = 59.911316550780164;
@@ -42,7 +61,6 @@ const useMergedStationData = () => {
         }
         return acc;
       }, []);
-
       setStations(mergedStationsInfo);
     }
   }, [data]);

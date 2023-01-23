@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+interface Data {
+  data: any;
+}
+
 interface ApiResponse<T> {
-  data: T;
+  data: Data;
   status: number;
   statusText: string;
   headers: any;
@@ -13,7 +17,10 @@ interface Error {
   message: string;
 }
 
-const useStationInfo = <T>(url: string, initialData: T): [T, boolean, any] => {
+const useStationInfo = <T>(
+  url: string,
+  initialData: T
+): [T | any, boolean, any] => {
   const [data, setData] = useState<T>(initialData);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | undefined>();
@@ -30,7 +37,8 @@ const useStationInfo = <T>(url: string, initialData: T): [T, boolean, any] => {
       setLoading(true);
       try {
         const response: ApiResponse<T> = await axios.get(url, config);
-        setData(response?.data || initialData);
+        const uniqueData: any = [...new Set(response?.data?.data?.stations)];
+        setData(uniqueData || initialData);
         setLoading(false);
       } catch (err: unknown) {
         if (err instanceof Error) {

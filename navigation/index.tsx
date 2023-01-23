@@ -67,10 +67,9 @@ function BottomTabNavigator() {
       <BottomTab.Screen
         name="TabOne"
         component={HomeScreen}
-        options={({ navigation, route }: RootTabScreenProps<'TabOne'>) => ({
+        options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
           title: 'MapMyBike v1',
           tabBarLabel: 'Bikes',
-          tabBarBadge: route?.params?.stations || null,
           tabBarIcon: ({ color }) => <TabBarIcon name="bicycle" color={color} />,
         })}
 

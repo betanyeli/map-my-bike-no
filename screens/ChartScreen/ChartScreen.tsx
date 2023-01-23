@@ -1,44 +1,29 @@
-import { View, FlatList } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { styles } from './ChartScreen.styles'
-import { Station } from '../../interfaces/StationStatus';
+import { View, FlatList } from 'react-native';
+import React, { useContext } from 'react';
+import { styles } from './ChartScreen.styles';
 import Loader from '../../components/loader/Loader';
 import ErrorScreen from '../ErrorScreen/ErrorScreen';
 import { MonoText } from '../../components/StyledText';
-import useStationInfo from '../../hooks/useStationInfo';
+import { StationsContext } from '../../context/StationsContex';
 
 const ChartScreen = () => {
 
-    const BASE_URL = `https://gbfs.urbansharing.com/oslobysykkel.no/station_status.json`;
+    const { stations, loading, error } = useContext(StationsContext)
 
-    const [data, loading, error] = useStationInfo(BASE_URL, {
-        data: {
-            stations: [{
-            }]
-        }
-    });
-    const [stations, setStations] = useState<Station[]>([])
+    type ItemProps = {
+        name: string;
+        address: string;
+        num_bikes_available: number;
+    };
 
-    useEffect(() => {
-        if (data?.data?.stations) {
-            const uniqueStations: any = [...new Set(data?.data?.stations)]
-            setStations(uniqueStations)
-        }
-    }, [data])
-
-    type ItemProps = { title: string };
-
-    const Item = ({ title }: ItemProps) => (
-        <View style={{
-            backgroundColor: '#f9c2ff',
-            padding: 20,
-            marginVertical: 8,
-            marginHorizontal: 16,
-        }}>
-            <MonoText>{title}</MonoText>
+    const Item = ({ name, address, num_bikes_available }: ItemProps) => (
+        <View style={styles.itemView}>
+            <MonoText style={styles.title}>{name}</MonoText>
+            <View style={styles.addressContainer}><MonoText style={styles.address}>{address}</MonoText>
+                <MonoText style={num_bikes_available > 3 ? { color: "#89ce00" } : { color: "#f57600" }}>{`Bikes: ${num_bikes_available}`}</MonoText>
+            </View>
         </View>
     );
-
 
     if (error) {
         return <ErrorScreen />;
@@ -46,11 +31,12 @@ const ChartScreen = () => {
     return (
         <View style={styles.container}>
             <Loader loading={loading} />
-            <FlatList
-                data={stations}
-                keyExtractor={item => item.station_id + item.last_reported}
-                renderItem={({ item }) => <Item title={item.station_id} />}
-            />
+            {stations.length > 0 && <FlatList
+                data={stations.sort((a: any, b: any) => (a.name > b.name) ? 1 : -1)}
+                keyExtractor={(item: any) => item.station_id + item.last_reported}
+                renderItem={({ item }) => <Item name={item.name} address={item.address} num_bikes_available={item.num_bikes_available} />}
+            />}
+
         </View>
     )
 }

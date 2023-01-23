@@ -3,12 +3,14 @@ import LottieView from 'lottie-react-native';
 import React, { useRef } from 'react'
 import { styles } from './ErrorScreen.styles'
 import { MonoText } from '../../components/StyledText';
+import { useNavigation } from '@react-navigation/native';
 
 
 const ErrorScreen = () => {
     const animation = useRef(null);
-    const errorTitleMessage = "Oops😔! \n Looks like something went wrong"
-    const errorSubtitleMessage = "Please, try again or check back later for new updates 😉"
+    const navigation = useNavigation()
+    const errorTitleMessage = "Oops😔! \n This feature is not available... yet :D"
+    const errorSubtitleMessage = "Check back later for new updates 😉"
 
     return (
         <View style={styles.container}>
@@ -25,7 +27,7 @@ const ErrorScreen = () => {
             />
 
 
-            <Button title='Go back' accessibilityLabel='Go to previous page' color="#0073E6" />
+            <Button title='Go back' accessibilityLabel='Go to previous page' color="#0073E6" onPress={() => navigation.goBack()} />
 
         </View>
     )

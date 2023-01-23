@@ -3,7 +3,6 @@
     "name": "Map My Bike",
     "slug": "map-my-bike-no",
     "version": "1.0.0",
-    "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
@@ -24,7 +23,7 @@
       },
       "config": {
         "googleMaps": {
-          "apiKey": "ApiKeyUwU"
+          "apiKey": "AIzaSyAoQsTiphE-kNYSyI7Z6tkPgG-V9yy3PXc"
         }
       },
       "package": "com.betanyeli.mapmybikeno"
@@ -41,6 +40,14 @@
       "eas": {
         "projectId": "9c22383d-690a-42eb-b5cd-c62e7a7312a8"
       }
-    }
+    },
+    "plugins": [
+      [
+        "expo-screen-orientation",
+        {
+          "initialOrientation": "DEFAULT"
+        }
+      ]
+    ]
   }
 }
